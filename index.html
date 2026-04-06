@@ -175,40 +175,57 @@
     const loginInput = document.getElementById('login');
     const passwordInput = document.getElementById('password');
 
+    // Настраиваем "правильные" данные для входа
+    const VALID_LOGIN = "admin@mail.ru";
+    const VALID_PASSWORD = "password123";
+
     authForm.addEventListener('submit', function(e) {
-        e.preventDefault(); // Чтобы страница не перезагружалась
+        e.preventDefault();
 
         const loginValue = loginInput.value.trim();
         const passwordValue = passwordInput.value.trim();
 
-        // Сбрасываем стили перед проверкой
+        // Сбрасываем стили перед каждой проверкой
         messageBox.className = '';
+        messageBox.style.display = 'none';
         loginInput.classList.remove('error-border');
         passwordInput.classList.remove('error-border');
 
-        // Логика проверки (валидация)
+        // 1. Проверка на пустые поля
         if (loginValue === "" || passwordValue === "") {
-            // Если поля пустые
-            messageBox.innerHTML = "Пожалуйста, заполните все поля ввода.";
+            messageBox.innerHTML = "Ошибка: Все поля должны быть заполнены!";
             messageBox.classList.add('error-msg');
-            
-            if(loginValue === "") loginInput.classList.add('error-border');
-            if(passwordValue === "") passwordInput.classList.add('error-border');
+            messageBox.style.display = 'block';
 
-        } else if (passwordValue.length < 6) {
-            // Если пароль слишком короткий (пример неверного ввода)
+            if (loginValue === "") loginInput.classList.add('error-border');
+            if (passwordValue === "") passwordInput.classList.add('error-border');
+            return; // Останавливаем выполнение функции
+        }
+
+        // 2. Проверка логина
+        if (loginValue !== VALID_LOGIN) {
+            messageBox.innerHTML = "Пользователь с таким логином не найден.";
+            messageBox.classList.add('error-msg');
+            messageBox.style.display = 'block';
+            loginInput.classList.add('error-border');
+            return;
+        }
+
+        // 3. Проверка пароля
+        if (passwordValue !== VALID_PASSWORD) {
             messageBox.innerHTML = "Неверный пароль. Пожалуйста, проверьте введённые данные.";
             messageBox.classList.add('error-msg');
+            messageBox.style.display = 'block';
             passwordInput.classList.add('error-border');
-            
-        } else {
-            // Успешная "регистрация" или вход
-            messageBox.innerHTML = "Вход выполнен успешно! <b>Ты молодец!</b>";
-            messageBox.classList.add('success-msg');
+            return;
         }
+
+        // 4. Если всё верно
+        messageBox.innerHTML = "Вход выполнен успешно! <b>Ты молодец!</b>";
+        messageBox.classList.add('success-msg');
+        messageBox.style.display = 'block';
     });
 </script>
-
 </body>
 </html>
 
