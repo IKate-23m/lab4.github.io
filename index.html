@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница входа</title>
+    <style>
+        /* Общие стили фона как на скриншоте */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #7d75cc; /* Фиолетовый фон */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Белая карточка формы */
+        .login-card {
+            background-color: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #777;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        /* Стили полей ввода */
+        .input-group {
+            text-align: left;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #7189da;
+        }
+
+        /* Красная рамка при ошибке */
+        input.error-border {
+            border-color: #ffbaba;
+            background-color: #fff9f9;
+        }
+
+        /* Кнопка войти */
+        .btn-login {
+            background-color: #7189da;
+            color: white;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-login:hover {
+            background-color: #5b73c4;
+        }
+
+        /* Блок сообщений (ошибка/успех) */
+        #message-box {
+                        margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            display: none; /* Скрыто по умолчанию */
+        }
+
+        .error-msg {
+            background-color: #fce8e8;
+            color: #a83131;
+            border: 1px solid #ffbaba;
+            display: block !important;
+        }
+
+        .success-msg {
+            background-color: #e8fcf0;
+            color: #2d7a4d;
+            border: 1px solid #baf0d1;
+            display: block !important;
+        }
+
+        /* Ссылки внизу */
+        .footer-links {
+            margin-top: 25px;
+            font-size: 13px;
+        }
+
+        .footer-links a {
+            color: #7189da;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-card">
+    <h1>Добро пожаловать</h1>
+    <p class="subtitle">Войдите в свой аккаунт</p>
+
+    <form id="authForm">
+        <div class="input-group">
+            <label for="login">Логин или email</label>
+            <input type="text" id="login">
+        </div>
+
+        <div class="input-group">
+            <label for="password">Пароль</label>
+            <input type="password" id="password">
+        </div>
+
+        <button type="submit" class="btn-login">Войти</button>
+    </form>
+
+    <!-- Тот самый блок для уведомлений -->
+    <div id="message-box"></div>
+
+    <div class="footer-links">
+        <a href="#">Забыли пароль?</a> • <a href="#">Создать аккаунт</a>
+    </div>
+</div>
+
+<script>
+    const authForm = document.getElementById('authForm');
+    const messageBox = document.getElementById('message-box');
+    const loginInput = document.getElementById('login');
+    const passwordInput = document.getElementById('password');
+
+    authForm.addEventListener('submit', function(e) {
+        e.preventDefault(); // Чтобы страница не перезагружалась
+
+        const loginValue = loginInput.value.trim();
+        const passwordValue = passwordInput.value.trim();
+
+        // Сбрасываем стили перед проверкой
+        messageBox.className = '';
+        loginInput.classList.remove('error-border');
+        passwordInput.classList.remove('error-border');
+
+        // Логика проверки (валидация)
+        if (loginValue === "" || passwordValue === "") {
+            // Если поля пустые
+            messageBox.innerHTML = "Пожалуйста, заполните все поля ввода.";
+            messageBox.classList.add('error-msg');
+            
+            if(loginValue === "") loginInput.classList.add('error-border');
+            if(passwordValue === "") passwordInput.classList.add('error-border');
+
+        } else if (passwordValue.length < 6) {
+            // Если пароль слишком короткий (пример неверного ввода)
+            messageBox.innerHTML = "Неверный пароль. Пожалуйста, проверьте введённые данные.";
+            messageBox.classList.add('error-msg');
+            passwordInput.classList.add('error-border');
+            
+        } else {
+            // Успешная "регистрация" или вход
+            messageBox.innerHTML = "Вход выполнен успешно! <b>Ты молодец!</b>";
+            messageBox.classList.add('success-msg');
+        }
+    });
+</script>
+
+</body>
+</html>
+
